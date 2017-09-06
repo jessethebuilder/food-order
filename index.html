@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Order</title>
+
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="css/anysoft_cart.css">
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/underscore.js"></script>
+    <script src="js/vendor/backbone.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/backbone_local_storage.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div id="anysoft_cart_products"></div>
+        </div>
+        <div class="col-sm-6">
+          <div id="anysoft_cart_order"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Templates ------------------------------------------------------------------------>
+    <script type="text/template" id="anysoft_cart_checkout_template">
+      <div id="complete_anysoft_cart"></div>
+      <button class="continue">Contuine Ordering</button>
+    </script>
+
+    <script type="text/template" id="anysoft_cart_order_template">
+      <div class="order_item_list"></div>
+      <div>Total:<span class="order_total"></span></div>
+      <div>Item Count: <span class="order_item_count"></span></div>
+
+      <div class="order_controls">
+        <button class="complete">Complete Order</button>
+        <button class="destroy">Restart Order</button>
+      </div>
+    </script>
+
+    <script type="text/template" id="anysoft_cart_product_template">
+      <!-- <input class="quantity" value="1" /> -->
+      <div class="product">
+        <div class="name">{{ name }} {{ price }}</div>
+        <div class="description">
+          {{ description }}
+        </div>
+        <div class="addons"></div>
+        <div class="add_to_cart">Add to Order <span class="current_price">{{ current_price }}</div>
+      </div>
+    </script>
+    <!-- <script type="text/template" id="anysoft_cart_product_template">
+      <div class="product">
+        <div class="name">{{ name }} {{ price }}</div>
+        <div class="description">
+          {{ description }}
+        </div>
+        <div class="addons"></div>
+        <div class="add_to_cart">Add to Order <span class="current_price">{{ current_price }}</div>
+      </div>
+    </script> -->
+
+    <script type="text/template" id="anysoft_cart_addon_template">
+      <div class="addon">
+        <div class="toggle">
+          {{ name }} {{ price }}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="anysoft_cart_order_item_template">
+      <!-- {{ name }} {{ price }} Total: {{ (quantity * price).toFixed(2) }} -->
+      {{ name }} {{ (quantity * price).toFixed(2) }}
+      <!-- <input type="number" class="quantity" value="{{ quantity }}" /> -->
+      <button class="remove_from_cart">Remove</button>
+    </script>
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="js/paypal_client.js"></script>
+    <script src="js/anysoft_cart.js"></script>
+
+
+    <script>
+      _.templateSettings = {
+        interpolate: /\{\{(.+?)\}\}/g
+      };
+      $(document).ready(function(){
+        var products = [
+          {name: 'Steve', price: 1.32, id: 2, description: 'Here is a description'},
+          {name: 'Steve', price: 1.32, id: 3, description: 'Here is a description'},
+          {name: 'Steve323', price: 331.32, id: 5, description: 'Here is a description'},
+          {name: 'Stev3e', price: 15.32, id: 4, description: 'Here is a description'},
+        ];
+
+
+
+        var oa = new AnysoftCart(products);
+
+
+      });
+    </script>
+  </body>
+</html>

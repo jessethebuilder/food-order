@@ -1,0 +1,24 @@
+#anysoft_cart_products{
+  .product{
+
+    padding: 10px;
+    margin: 10px;
+    background-color: #ddd;
+    .name{
+      font-size: 23px;
+    }
+    .description{
+      font-size: 12px;
+    }
+    .addons{
+      font-size: 16px;
+      padding-left: 20px;
+    }
+  }
+  .add_to_cart{
+
+  }
+  .add_to_cart:hover{
+    cursor: pointer;
+  }
+}
