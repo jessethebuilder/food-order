@@ -43,7 +43,7 @@ function AnysoftCart(products, opts){
       'change .quantity': 'updateOrderItemQuantity'
     },
     initialize: function(){
-      this.listenTo(this.model, 'destroy', this.remove);
+        this.listenTo(this.model, 'destroy', this.remove);
     },
     removeFromCart: function(){
       this.model.destroy();
@@ -200,43 +200,43 @@ function AnysoftCart(products, opts){
   });
 
   //--- Addon ------------------------------------------------------------------------
-  var Addon = Backbone.Model.extend({
-    defaults: {
-      id: null,
-      name: null,
-      price: null,
-      product_cid: null,
-      active: false
-    }
-  });
-
-  var AddonView = Backbone.View.extend({
-    model: Addon,
-    template: _.template($('#anysoft_cart_addon_template').html()),
-    render: function(){
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
-    },
-    initialize: function(){
-      this.listenTo(this.model, 'change:active', this.toggleActive);
-    },
-    toggleActive: function(){
-      var product = app.products.get({cid: this.model.get('product_cid')});
-      if(this.model.get('active')){
-        // product.set({current_price: (product.get('current_price') + this.model.get('price')).toFixed(2)});
-        product.set({current_price: (product.get('current_price') + this.model.get('price'))});
-      } else {
-        // product.set({current_price: (product.get('current_price') - this.model.get('price')).toFixed(2)});
-        product.set({current_price: (product.get('current_price') - this.model.get('price'))});
-      }
-    },
-    events: {
-      'click .toggle' : 'toggle'
-    },
-    toggle: function(){
-      this.model.set({active: !this.model.get('active')});
-    }
-  })
+  // var Addon = Backbone.Model.extend({
+  //   defaults: {
+  //     id: null,
+  //     name: null,
+  //     price: null,
+  //     product_cid: null,
+  //     active: false
+  //   }
+  // });
+  //
+  // var AddonView = Backbone.View.extend({
+  //   model: Addon,
+  //   template: _.template($('#anysoft_cart_addon_template').html()),
+  //   render: function(){
+  //     this.$el.html(this.template(this.model.toJSON()));
+  //     return this;
+  //   },
+  //   initialize: function(){
+  //     this.listenTo(this.model, 'change:active', this.toggleActive);
+  //   },
+  //   toggleActive: function(){
+  //     var product = app.products.get({cid: this.model.get('product_cid')});
+  //     if(this.model.get('active')){
+  //       // product.set({current_price: (product.get('current_price') + this.model.get('price')).toFixed(2)});
+  //       product.set({current_price: (product.get('current_price') + this.model.get('price'))});
+  //     } else {
+  //       // product.set({current_price: (product.get('current_price') - this.model.get('price')).toFixed(2)});
+  //       product.set({current_price: (product.get('current_price') - this.model.get('price'))});
+  //     }
+  //   },
+  //   events: {
+  //     'click .toggle' : 'toggle'
+  //   },
+  //   toggle: function(){
+  //     this.model.set({active: !this.model.get('active')});
+  //   }
+  // })
 
   //--- Checkout ----------------------------------------------------------------------
 
@@ -264,7 +264,7 @@ function AnysoftCart(products, opts){
     }
   });
 
-  this.initProducts = function(){    
+  this.initProducts = function(){
     this.products = new Products(this.product_data);
     new ProductsView({collection: this.products}).render();
   }
