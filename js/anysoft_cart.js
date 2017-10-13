@@ -199,45 +199,6 @@ function AnysoftCart(products, opts){
     }
   });
 
-  //--- Addon ------------------------------------------------------------------------
-  // var Addon = Backbone.Model.extend({
-  //   defaults: {
-  //     id: null,
-  //     name: null,
-  //     price: null,
-  //     product_cid: null,
-  //     active: false
-  //   }
-  // });
-  //
-  // var AddonView = Backbone.View.extend({
-  //   model: Addon,
-  //   template: _.template($('#anysoft_cart_addon_template').html()),
-  //   render: function(){
-  //     this.$el.html(this.template(this.model.toJSON()));
-  //     return this;
-  //   },
-  //   initialize: function(){
-  //     this.listenTo(this.model, 'change:active', this.toggleActive);
-  //   },
-  //   toggleActive: function(){
-  //     var product = app.products.get({cid: this.model.get('product_cid')});
-  //     if(this.model.get('active')){
-  //       // product.set({current_price: (product.get('current_price') + this.model.get('price')).toFixed(2)});
-  //       product.set({current_price: (product.get('current_price') + this.model.get('price'))});
-  //     } else {
-  //       // product.set({current_price: (product.get('current_price') - this.model.get('price')).toFixed(2)});
-  //       product.set({current_price: (product.get('current_price') - this.model.get('price'))});
-  //     }
-  //   },
-  //   events: {
-  //     'click .toggle' : 'toggle'
-  //   },
-  //   toggle: function(){
-  //     this.model.set({active: !this.model.get('active')});
-  //   }
-  // })
-
   //--- Checkout ----------------------------------------------------------------------
 
   var CheckoutView = Backbone.View.extend({
@@ -279,29 +240,29 @@ function AnysoftCart(products, opts){
     });
   }
 
-  this.checkout = function(){
-    this.initProducts();
-    this.order = new Order;
-    this.order.fetch().then(function(){
-      new CheckoutView().render();
-    });
-  }
-
-  var Router = Backbone.Router.extend({
-    routes: {
-      "checkout" : "showCheckout",
-      "" : "showOrder",
-    },
-    showOrder: function(){
-      app.init();
-    },
-    showCheckout: function(){
-      app.checkout();
-    }
-  });
-
-  this.router = new Router();
-  // Backbone.history.start({pushState: true});
-
-  Backbone.history.start();
+  // this.checkout = function(){
+  //   this.initProducts();
+  //   this.order = new Order;
+  //   this.order.fetch().then(function(){
+  //     new CheckoutView().render();
+  //   });
+  // }
+  //
+  // var Router = Backbone.Router.extend({
+  //   routes: {
+  //     "checkout" : "showCheckout",
+  //     "" : "showOrder",
+  //   },
+  //   showOrder: function(){
+  //     app.init();
+  //   },
+  //   showCheckout: function(){
+  //     app.checkout();
+  //   }
+  // });
+  //
+  // this.router = new Router();
+  // // Backbone.history.start({pushState: true});
+  //
+  // Backbone.history.start();
 }
