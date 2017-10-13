@@ -16,23 +16,33 @@ function AnysoftCart(products, opts){
     }
   });
 
-  var Order = Backbone.Collection.extend({
+  var OrderItems = Backbone.Collection.extend({
     model: OrderItem,
-    localStorage: new Backbone.LocalStorage('order_app_storage'),
-    url: app.order_endpoint,
-    complete: function(){
-      this.sync({
-        ajaxSync: true
-      });
+    localStorage: new Backbone.LocalStorage('anysoft_cart_order_items'),
+
+  });
+
+  var Order = Backbone.Model.extend({
+    localStorage: new Backbone.LocalStorage('anysoft_cart_order'),
+    // complete: function(){
+    //   this.sync({
+    //     ajaxSync: true
+    //   });
+    // },
+    defaults:{
+      items: new OrderItems
+    },
+    parse: function(e){
+      // console.log(e);
     },
     total: function(){
       var total = 0;
-      this.each(function(oi){
+      this.get('items').each(function(oi){
         total += oi.get('price') * oi.get('quantity');
       });
 
       return total;
-    },
+    }
   });
 
   var OrderItemView = Backbone.View.extend({
@@ -64,16 +74,16 @@ function AnysoftCart(products, opts){
     }
   });
 
-  var OrderView = Backbone.View.extend({
-    collection: Order,
+  var OrderItemsView = Backbone.View.extend({
+    collection: OrderItems,
     el: $('#anysoft_cart_order'),
     template: _.template($('#anysoft_cart_order_template').html()),
     initialize: function(){
       _.bindAll(this, 'addOrderItem');
       _.bindAll(this, 'updateOrder');
 
-      app.order.listenTo(app.order, 'add', this.addOrderItem);
-      app.order.listenTo(app.order, 'all', this.updateOrder);
+      app.order.listenTo(this.collection, 'add', this.addOrderItem);
+      app.order.listenTo(this.collection, 'all', this.updateOrder);
     },
     addOrderItem: function(order_item){
       var view = new OrderItemView({model: order_item});
@@ -83,10 +93,10 @@ function AnysoftCart(products, opts){
       this.init();
     },
     init: function(){
-      this.$el.find('.order_total').text(this.collection.total().toFixed(2));
-      this.$el.find('.order_item_count').text(this.collection.length);
-      // show/hide the order, depending on whether there is any OrderItems
-      this.collection.length > 0 ? this.$el.show() : this.$el.hide();
+      // this.$el.find('.order_total').text(this.collection.total().toFixed(2));
+      // this.$el.find('.order_item_count').text(this.collection.length);
+      // // show/hide the order, depending on whether there is any OrderItems
+      // this.collection.length > 0 ? this.$el.show() : this.$el.hide();
     },
     events: {
       'click .complete': 'completeOrder',
@@ -166,8 +176,8 @@ function AnysoftCart(products, opts){
       // Looks for an element with the quantity class. If none is found, assume 1
       var q = this.$el.find('.quantity').val() || 1;
       var oi = new OrderItem({name: this.model.get('name'), price: this.model.get('price'), quantity: q, product_id: this.model.get('id')});
-      app.order.add(oi);
-      oi.save();
+      app.order.get('items').add(oi);
+      // oi.save();
     },
     render: function(){
       this.$el.html(this.template(this.model.toJSON()));
@@ -234,35 +244,29 @@ function AnysoftCart(products, opts){
     const t = this;
     this.initProducts();
 
-    t.order = new Order;
-    t.order.fetch().then(function(){
-      new OrderView({collection: t.order}).render();
+    return new Promise(function(res, rej){
+      t.order = new Order;
+      t.order.fetch().then(function(){
+        // c(t.order);
+        new OrderItemsView({collection: t.order.get('items')}).render();
+        res();
+      });
     });
   }
 
-  // this.checkout = function(){
-  //   this.initProducts();
-  //   this.order = new Order;
-  //   this.order.fetch().then(function(){
-  //     new CheckoutView().render();
-  //   });
-  // }
-  //
-  // var Router = Backbone.Router.extend({
-  //   routes: {
-  //     "checkout" : "showCheckout",
-  //     "" : "showOrder",
-  //   },
-  //   showOrder: function(){
-  //     app.init();
-  //   },
-  //   showCheckout: function(){
-  //     app.checkout();
-  //   }
-  // });
-  //
-  // this.router = new Router();
-  // // Backbone.history.start({pushState: true});
-  //
-  // Backbone.history.start();
+  this.checkout = function(){
+    this.initProducts();
+    this.order = new Order;
+    this.order.fetch().then(function(){
+      new CheckoutView().render();
+    });
+  }
+
+  this.add = function(name, price, quantity){
+    if(typeof quantity === 'undefined'){ quantity = 1; }
+    var order_item = new OrderItem({name: name, price: price, quantity: quantity});
+    this.order.get('items').add(order_item);
+    console.log(this.order.toJSON());
+    // this.order.save();
+  }
 }

@@ -100,7 +100,9 @@
 
 
         var oa = new AnysoftCart(products);
-
+        oa.init().then(function(){
+          oa.add('New', 1.00);
+        });
 
       });
     </script>
